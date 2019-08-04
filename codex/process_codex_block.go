@@ -6,7 +6,6 @@ import (
 	"crypto/sha256"
 	"crypto/rand"
 	"fmt"
-	"github.com/gemerio/go-gemer/crypto"
 )
 
 func FindTargetBlock(barecodex *BareCodex, parentModuleHash [64]byte) *ModuleBlock {
@@ -30,8 +29,8 @@ func ProcessCodexBlock(params *[]WASMParams, barecodex *BareCodex) []byte {
 	// Iterate over a bare codex
 	for i, module := range &barecodex.Moduleblocks {
 		if module.parentModuleHash == nil {
-			wasmreturned := append(&(module.ModuleBytecode))
-			wasmreturned := append(ExecuteWASMBlock(module.ModuleBytecode, *params[i]))
+			wasmreturned := append(wasmreturned, &(module.ModuleBytecode))
+			wasmreturned := append(wasmreturned, ExecuteWASMBlock(module.ModuleBytecode, *params[i]))
 		}
 		else {
 			// Find the parentmodule block with the given hash from the array
@@ -48,12 +47,12 @@ func ProcessCodexBlock(params *[]WASMParams, barecodex *BareCodex) []byte {
 				}
 			}
 			if indexblock == nil {
-				wasmreturned := append(&(module.ModuleBytecode))
-				wasmreturned := append(ExecuteWASMBlock(module.ModuleBytecode, *params[i]))
+				wasmreturned := append(wasmreturned, &(module.ModuleBytecode))
+				wasmreturned := append(wasmreturned, ExecuteWASMBlock(module.ModuleBytecode, *params[i]))
 			}
 			else {
-				wasmreturned := append(&(module.ModuleBytecode))
-				wasmreturned := append(ExecuteWASMBlock(module.ModuleBytecode, wasmreturned[len(wasmreturned)-2]))
+				wasmreturned := append(wasmreturned, &(module.ModuleBytecode))
+				wasmreturned := append(wasmreturned, ExecuteWASMBlock(module.ModuleBytecode, wasmreturned[len(wasmreturned)-2]))
 			}
 		}
 	}
@@ -75,9 +74,9 @@ func ValidateState(stateblock *StateChainBlock, wasmreturned []byte, params *[]W
 			panic("Signature does not match")
 		}
 		// Write the signed hash to the state block
-		*stateblock.signedstatehash := append(0, r, 0, s)
+		&stateblock.signedstatehash := append(0, r, 0, s)
 		// Write the public key
-		*stateblock.signedkeys := append(*pub)
+		&stateblock.signedkeys := append(*pub)
 	}
 	else {
 		// TODO: Call consensus & re-execute from given point

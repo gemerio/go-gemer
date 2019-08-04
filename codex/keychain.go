@@ -7,7 +7,7 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 
-	"github.com/gemer/go-gemer/consensus"
+	"github.com/gemerio/go-gemer/consensus"
 )
 
 type Keychain struct {
@@ -36,5 +36,5 @@ func GenerateKeys() *PrivateKey {
 // Write the public key to the keychain
 
 func WriteToKeychain(keychain *Keychain, pubkey *PublicKey) {
-	&keychain.publickeys  := append(&pubkey)
+	&keychain.publickeys  := append(&keychain.publickeys, &pubkey)
 }

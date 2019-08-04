@@ -8,7 +8,7 @@ import (
 
 	"github.com/gemerio/go-gemer/consensus"
 
-	"github.com/perlin-network/life/exec"
+	"github.com/gemerio/go-gemer/codex/life/exec"
 )
 
 // Defines a WASM bytecode format

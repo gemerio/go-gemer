@@ -3,12 +3,10 @@ package codex
 import (
 	"bytes"
 	"crypto/sha256"
-	"github.com/go-gemer/crypto"
 	"hash"
 	"os"
 
 	"github.com/gemerio/go-gemer/consensus"
-	"github.com/gemerio/go-gemer/crypto"
 )
 
 // Defines a state chain block

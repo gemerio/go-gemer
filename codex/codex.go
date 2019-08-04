@@ -4,11 +4,11 @@ import (
 	"os"
 	"time"
 
-	"github.com/gemer/go-gemer/consensus"
+	"github.com/gemerio/go-gemer/consensus"
 )
 
 type Codex struct {
-	barecodex *BareCodex
+	barecodex  *BareCodex
 	statechain *StateChain
-	keychain *Keychain
+	keychain   *Keychain
 }

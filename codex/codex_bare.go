@@ -5,10 +5,19 @@ import (
 	"crypto/sha256"
 	"hash"
 	"os"
+	"encoding/json"
 
 	"github.com/gemerio/go-gemer/consensus"
-	"github.com/gemerio/go-gemer/crypto"
 )
+
+func generateHash(moduleblocks []ModuleBlock) [64]byte {
+	arrayBytes := []byte{}
+	for _, codex := range moduleblocks {
+		jsonReadBytes, _ := json.Marshal(codex)
+		arrayBytes = append(arrayBytes, jsonReadBytes...)
+	}
+	return sha256.Sum(arrayBytes)
+}
 
 // Defines a WebAssembly module block
 type ModuleBlock struct {
@@ -47,7 +56,7 @@ func NewBareCodex(genesisblock ModuleBlock) *BareCodex{
 		Moduleblocks: 	moduleblock,
 		barecodexhash: 	nil
 	}
-	barecodex.barecodexhash = crypto.generateHash(moduleblocks)
+	barecodex.barecodexhash = generateHash(moduleblocks)
 	return barecodex
 }
 
@@ -58,10 +67,10 @@ func AddModuleToCodex(moduleblock *ModuleBlock, barecodex *BareCodex) {
 		panic("The bare codex is not correctly initialized.")
 	}
 	// Add a new module block to the codex
-	append(barecodex.moduleblocks, moduleblock)
+	barecodex.moduleblocks := append(barecodex.moduleblocks, moduleblock)
 
 	// Recalculate the bare codex hash
-	barecodex.barecodexhash = crypto.generateHash(moduleblocks)
+	barecodex.barecodexhash = generateHash(moduleblocks)
 }
 
 // Reads a preconfigured JSON file to generate a bare codex
