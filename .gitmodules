@@ -1,3 +1,6 @@
 [submodule "consensus/go-algorand"]
 	path = consensus/go-algorand
 	url = https://github.com/algorand/go-algorand
+[submodule "codex/life"]
+	path = codex/life
+	url = https://github.com/perlin-network/life
