@@ -1,26 +1,22 @@
 package codex
 
 import (
-	"bytes"
-	"crypto/sha256"
-	"hash"
-	"os"
-
-	"github.com/gemerio/go-gemer/consensus"
+	"crypto"
+	"math/big"
 )
 
 // Defines a state chain block
 type StateChainBlock struct {
 	// previous block hash - regardless of bytecode or state block
-	PrevHash [64]byte
+	PrevHash [32]byte
 	// Committed state
 	state *BlockedState
 	// SHA-256 hash of this commit round
-	statehash [64]byte
+	statehash [32]byte
 	// An array of signed SHA-256 hash values of this commit round
-	signedstatehash []byte
+	signedstatehash []*big.Int
 	// An array of all keys that signed this state chain
-	signedkeys []PublicKey
+	signedkeys []crypto.PublicKey
 }
 
 // Defines a "blocked state" - state data that may be omitted during a node sync

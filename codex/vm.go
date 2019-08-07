@@ -1,12 +1,8 @@
 package codex
 
 import (
-	"os"
 	"fmt"
-	"time"
 	"io/ioutil"
-
-	"github.com/gemerio/go-gemer/consensus"
 
 	"github.com/gemerio/life/exec"
 )
@@ -33,15 +29,21 @@ type WASMReturned struct {
 	// A set of params returned by a WASM module.
 	// Defined as []byte as params are not given in a particular format
 	wasmreturned []byte
+	// Pointer to original bytecode
+	bytecode *WASMBytecode
 	// Any additional arguments returned?
 	arguments string
 }
 
 // Reads WASM bytecode from a specified file
-func NewWASMBytecode(filename string) *WASMBytecode{
-	bytecodeblock := &WASMBytecode {
-		wasmbytecode:	ioutil.ReadFile(filename),
-		execargs:		nil
+func NewWASMBytecode(filename string) *WASMBytecode {
+	bytecode, err := ioutil.ReadFile(filename)
+	if err != nil {
+		panic("Failed to read bytecode file")
+	}
+	bytecodeblock := &WASMBytecode{
+		wasmbytecode: bytecode,
+		execargs:     "",
 	}
 	return bytecodeblock
 }
@@ -67,9 +69,10 @@ func ExecuteWASMBlock(bytecodeblock WASMBytecode, params WASMParams) *WASMReturn
 		panic(err)
 	}
 	// Returns the reference of a WASMReturned struct
-	wasmreturned := &WASMReturned {
-		wasmreturned:	returned,
-		arguments:		nil
+	wasmreturned := &WASMReturned{
+		wasmreturned: []byte{byte(returned)},
+		bytecode:     &bytecodeblock,
+		arguments:    "",
 	}
 	return wasmreturned
 }

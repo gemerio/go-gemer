@@ -1,31 +1,28 @@
 package codex
 
 import (
-	"os"
+	"crypto"
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
-	"crypto/sha256"
-
-	"github.com/gemerio/go-gemer/consensus"
 )
 
 type Keychain struct {
-	publickeys []PublicKey
+	publickeys []crypto.PublicKey
 }
 
 // Generate new keychain
 
 func NewKeychain() *Keychain {
-	keychain := &Keychain {
-		publickeys:	nil
+	keychain := &Keychain{
+		publickeys: nil,
 	}
 	return keychain
 }
 
 // Generate unique device keys
 
-func GenerateKeys() *PrivateKey {
+func GenerateKeys() *ecdsa.PrivateKey {
 	pkey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	if err != nil {
 		panic(err)
@@ -35,6 +32,6 @@ func GenerateKeys() *PrivateKey {
 
 // Write the public key to the keychain
 
-func WriteToKeychain(keychain *Keychain, pubkey *PublicKey) {
-	&keychain.publickeys  := append(&keychain.publickeys, &pubkey)
+func WriteToKeychain(keychain Keychain, pubkey crypto.PublicKey) {
+	keychain.publickeys = append(keychain.publickeys, pubkey)
 }
